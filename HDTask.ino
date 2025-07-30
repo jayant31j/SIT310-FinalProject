@@ -160,17 +160,14 @@ void MazeSolver()
 {
   while (1)
   {
-    // Navigate current line segment
+
     followSegment();
 
-    // These variables record whether the robot has seen a line to the
-    // left, straight ahead, and right, while examining the current
-    // intersection.
     unsigned char found_left = 0;
     unsigned char found_straight = 0;
     unsigned char found_right = 0;
 
-    // Now read the sensors and check the intersection type.
+
     unsigned int sensors[6];
     reflectanceSensors.readLine(sensors);
 
@@ -180,9 +177,6 @@ void MazeSolver()
     if (ABOVE_LINE(sensors[5]))
       found_right = 1;
 
-    // Drive straight a bit more, until we are
-    // approximately in the middle of intersection.
-    // This should help us better detect if we
     // have left or right segments.
     motors.setSpeeds(SPEED, SPEED);
     delay(OVERSHOOT(LINE_THICKNESS) / 2);
@@ -195,11 +189,6 @@ void MazeSolver()
     if (ABOVE_LINE(sensors[5]))
       found_right = 1;
 
-    // After driving a little further, we
-    // should have passed the intersection
-    // and can check to see if we've hit the
-    // finish line or if there is a straight segment
-    // ahead.
     delay(OVERSHOOT(LINE_THICKNESS) / 2);
 
     // Check for a straight exit.
@@ -214,7 +203,6 @@ void MazeSolver()
     if (ABOVE_LINE(sensors[1]) || ABOVE_LINE(sensors[2]) || ABOVE_LINE(sensors[3]) || ABOVE_LINE(sensors[4]))
       found_straight = 1;
 
-    // Check for the ending spot.
     // If all four middle sensors are on dark black, we have
     // solved the maze.
     if (ABOVE_LINE(sensors[1]) && ABOVE_LINE(sensors[2]) && ABOVE_LINE(sensors[3]) && ABOVE_LINE(sensors[4]))
@@ -223,25 +211,13 @@ void MazeSolver()
       break;
     }
 
-    // Intersection identification is complete.
     unsigned char dir = selectTurn(found_left, found_straight, found_right);
 
-    // Make the turn indicated by the path.
     turn(dir);
 
-    // Store the intersection in the path variable.
     path[path_length] = dir;
     path_length++;
 
-    // You should check to make sure that the path_length
-    // does not exceed the bounds of the array. We'll
-    // ignore that in this example.
-
-    // Display the path on the screen in the last 4
-    // digits of the odometer reading.
-    // display.print('0' + path[path_length - 1]);
-
-    // Uncomment to delay between turns
     delay(1000);
   }
 }
