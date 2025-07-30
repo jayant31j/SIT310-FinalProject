@@ -161,14 +161,11 @@ void MazeSolver()
     // Navigate current line segment
     followSegment();
 
-    // These variables record whether the robot has seen a line to the
-    // left, straight ahead, and right, while examining the current
-    // intersection.
     unsigned char found_left = 0;
     unsigned char found_straight = 0;
     unsigned char found_right = 0;
 
-    // Now read the sensors and check the intersection type.
+
     unsigned int sensors[6];
     reflectanceSensors.readLine(sensors);
 
@@ -178,10 +175,7 @@ void MazeSolver()
     if (ABOVE_LINE(sensors[5]))
       found_right = 1;
 
-    // Drive straight a bit more, until we are
-    // approximately in the middle of intersection.
-    // This should help us better detect if we
-    // have left or right segments.
+ 
     motors.setSpeeds(SPEED, SPEED);
     delay(OVERSHOOT(LINE_THICKNESS) / 2);
 
@@ -193,11 +187,7 @@ void MazeSolver()
     if (ABOVE_LINE(sensors[5]))
       found_right = 1;
 
-    // After driving a little further, we
-    // should have passed the intersection
-    // and can check to see if we've hit the
-    // finish line or if there is a straight segment
-    // ahead.
+
     delay(OVERSHOOT(LINE_THICKNESS) / 2);
 
     // Check for a straight exit.
@@ -218,7 +208,5 @@ void MazeSolver()
     // Make the turn indicated by the path.
     turn(dir);
 
-    // Uncomment to delay between turns
-    // delay(1000);
   }
 }
